@@ -6,6 +6,10 @@ Kelompok IT05
   * I Gde Ardha Semaranatha Gunasatwika (05311940000034)
 
 ---
-## Table of Contents
+## Permasalahan
+Soal:
+ * Soal 1: Tidak dapat mengeset waktu dan terdapat kendala dalam mendownload file
+ * Soal 2: Tidak dapat memindahkan folder dengan ketentuan yang sesuai 
+ * Soal 3: Tidak dapat mengesekusi fungsi killer dan tidak dapat membuat file status.txt dengan enkripsi Caesar Cipher setiap berhasil membuat zip
 
 
