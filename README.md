@@ -7,6 +7,5 @@ Kelompok IT05
 
 ---
 ## Table of Contents
-* [Soal 1](#soal-1)
 
 
