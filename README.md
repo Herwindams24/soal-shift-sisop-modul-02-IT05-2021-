@@ -18,16 +18,16 @@ Kelompok IT05
 ## Soal 1
 Source Code : [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)
 
-**Deskripsi:**\
+**Deskripsi:**
 
 ### Soal 1.a.
 
 
-**Deskripsi:**\
+**Deskripsi:**
 
-**Asumsi Soal:**\
+**Asumsi Soal:**
 
-**Pembahasan:**\
+**Pembahasan:**
 
 ---
 ## Kendala
