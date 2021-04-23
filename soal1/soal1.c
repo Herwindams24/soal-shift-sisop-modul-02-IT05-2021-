@@ -1,11 +1,14 @@
-#include <stdlib.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <wait.h>
+#include <stdlib.h>
+#include <fcntl.h>
+#include <errno.h>
+#include <unistd.h>
+#include <syslog.h>
 #include <string.h>
-#include <dirent.h>
+#include <wait.h>
+#include <time.h>
 
 void createDir(char name[])
 {
@@ -16,310 +19,192 @@ void createDir(char name[])
     execv("/bin/mkdir", argv);
 }
 
-void download(char nama[], char link[])
+void download(char link[], char nama[])
 {
-    char down_dir[50] = "/home/kali/modul2/soal1/";
+
+    char down_dir[100] = "/home/kali/modul2/soal1/";
     strcat(down_dir, nama);
 
-    char *argv[] = {"wget", "-O", down_dir, link, NULL};
+    char *argv[] = {"wget", "--no-check-certificate", "-q", link, "-O", down_dir, NULL};
     execv("/usr/bin/wget", argv);
 }
 
-void extractZip(char fileName[])
+int main()
 {
-    char dir[50] = "/home/kali/modul2/soal1/";
-    char temp[50] = "/home/kali/modul2/soal1/";
-    strcat(temp, fileName); //menggabungkan string
+    char tgl[50];
+    time_t t;
+    struct tm *localDate;
+    pid_t parentid, sid;
+    int status;
+    pid_t childid = fork();
+    parentid = fork();
 
-    char *argv[] = {"unzip", temp, "-d", dir, NULL};
-    execv("/usr/bin/unzip", argv);
-}
-
-void copy(char name[], char tujuan[])
-{
-    char src[50] = "/home/kali/modul2/soal1/";
-    char dst[50] = "/home/kali/modul2/soal1/";
-
-    strcat(src, name);
-    strcat(dst, tujuan);
-
-    char *argv[] = {"cp", "-r", "-T", src, dst, NULL};
-    execv("/bin/cp", argv);
-}
-
-int main(int argc, char *argv[])
-{
-
-    pid_t pid, sid;
-
-    //Bunuh Parent Process
-    pid = fork();
-
-    if (pid < 0)
+    if (parentid < 0)
     {
         exit(EXIT_FAILURE);
     }
 
-    if (pid > 0)
+    if (parentid > 0)
     {
         exit(EXIT_SUCCESS);
     }
 
-    //Buat Unique Session ID (SID)
+    umask(0);
+
     sid = setsid();
     if (sid < 0)
     {
         exit(EXIT_FAILURE);
     }
 
-    // close(STDIN_FILENO);
-    // close(STDOUT_FILENO);
-    // close(STDERR_FILENO);
+    if ((chdir("/home/kali/modul2/soal1/")) < 0)
+    {
+        exit(EXIT_FAILURE);
+    }
+
+    close(STDIN_FILENO);
+    close(STDOUT_FILENO);
+    close(STDERR_FILENO);
 
     while (1)
     {
-        pid_t child_id11; //berjalan saat ultah
-        int status11;
-
-        child_id11 = fork();
-        if (child_id11 < 0)
+        t = time(NULL);
+        localDate = localtime(&t);
+        strftime(tgl, 50, "%Y-%m-%d %H:%M:%S", localDate);
+        if (strcmp(tgl, "2021-04-09 16:22:00") == 0)
         {
-            exit(EXIT_FAILURE);
-        }
 
-        if (child_id11 == 0)
-        {
-            pid_t child_id8; //berjalan 6 jam sebelumnya
-            int status8;
-
-            child_id8 = fork();
-            if (child_id8 < 0)
+            if (childid == 0)
             {
-                exit(EXIT_FAILURE);
-            }
-
-            if (child_id8 == 0)
-            {
-                pid_t child_id5;
-                int status5;
-
-                child_id5 = fork();
-                if (child_id5 < 0)
-                {
-                    exit(EXIT_FAILURE);
-                }
-
-                if (child_id5 == 0)
-                {
-                    pid_t child_id2;
-                    int status2;
-
-                    child_id2 = fork();
-                    if (child_id2 < 0)
-                    {
-                        exit(EXIT_FAILURE);
-                    }
-
-                    if (child_id2 == 0)
-                    {
-                        pid_t child_id;
-                        int status;
-
-                        child_id = fork();
-                        if (child_id < 0)
-                        {
-                            exit(EXIT_FAILURE);
-                        }
-
-                        if (child_id == 0)
-                        {
-                            sleep(5);
-                            createDir("Musyik");
-                        }
-                        else
-                        {
-                            while ((wait(&status)) > 0)
-                                ;
-                            pid_t child_id1;
-                            int status1;
-                            child_id1 = fork();
-
-                            if (child_id1 < 0)
-                            {
-                                exit(EXIT_FAILURE);
-                            }
-                            if (child_id1 == 0)
-                            {
-                                sleep(2);
-                                createDir("Fylm");
-                            }
-                            else
-                            {
-                                while ((wait(&status1)) > 0)
-                                    ;
-                                sleep(2);
-                                createDir("Pyoto");
-                            }
-                        }
-                    }
-                    else
-                    {
-                        while ((wait(&status2)) > 0)
-                            ;
-                        pid_t child_id3;
-
-                        child_id3 = fork();
-                        if (child_id3 < 0)
-                        {
-                            exit(EXIT_FAILURE);
-                        }
-
-                        if (child_id3 == 0)
-                        {
-                            sleep(5);
-                            download("Musik_for_Stevany.zip", "https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download");
-                        }
-                        else
-                        {
-                            pid_t child_id4;
-                            int status4;
-                            child_id4 = fork();
-
-                            if (child_id4 < 0)
-                            {
-                                exit(EXIT_FAILURE);
-                            }
-                            if (child_id4 == 0)
-                            {
-                                sleep(5);
-                                download("Foto_for_Stevany.zip", "https://drive.google.com/uc?id=1FsrAzb9B5ixooGUs0dGiBr-rC7TS9wTD&export=download");
-                            }
-                            else
-                            {
-                                while ((wait(&status4)) > 0)
-                                    ;
-                                sleep(5);
-                                download("Film_for_Stevany.zip", "https://drive.google.com/uc?id=1ktjGgDkL0nNpY-vT7rT7O6ZI47Ke9xcp&export=download");
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    while ((wait(&status5)) > 0)
-                        ;
-                    pid_t child_id6;
-                    int status6;
-
-                    child_id6 = fork();
-                    if (child_id6 < 0)
-                    {
-                        exit(EXIT_FAILURE);
-                    }
-
-                    if (child_id6 == 0)
-                    {
-                        sleep(5);
-                        extractZip("Musik_for_Stevany");
-                    }
-                    else
-                    {
-                        pid_t child_id7;
-                        child_id7 = fork();
-
-                        if (child_id7 < 0)
-                        {
-                            exit(EXIT_FAILURE);
-                        }
-                        if (child_id7 == 0)
-                        {
-                            sleep(5);
-                            extractZip("Foto_for_Stevany");
-                        }
-                        else
-                        {
-                            while ((wait(&status6)) > 0)
-                                ;
-                            sleep(5);
-                            extractZip("Film_for_Stevany");
-                        }
-                    }
-                }
+                createDir("Musyik");
             }
             else
             {
-                while ((wait(&status8)) > 0)
+                childid = fork();
+                if (childid == 0)
+                {
+                    createDir("Pyoto");
+                }
+                while (wait(NULL) != childid)
                     ;
-                pid_t child_id9;
-                int status9;
 
-                child_id9 = fork();
-                if (child_id9 < 0)
+                childid = fork();
+                if (childid == 0)
                 {
-                    exit(EXIT_FAILURE);
+                    createDir("Fylm");
                 }
+                while (wait(NULL) != childid)
+                    ;
 
-                if (child_id9 == 0)
+                childid = fork();
+                if (childid == 0)
                 {
-                    sleep(5);
-                    copy("FILM", "Fylm");
+                    download("https://drive.google.com/uc?id=1FsrAzb9B5ixooGUs0dGiBr-rC7TS9wTD&export=download", "Foto_for_Stevany.zip");
                 }
-                else
+                while (wait(NULL) != childid)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
                 {
-                    pid_t child_id10;
-                    child_id10 = fork();
-
-                    if (child_id10 < 0)
-                    {
-                        exit(EXIT_FAILURE);
-                    }
-                    if (child_id10 == 0)
-                    {
-                        sleep(5);
-                        copy("FOTO", "Pyoto");
-                    }
-                    else
-                    {
-                        while ((wait(&status9)) > 0)
-                            ;
-                        sleep(5);
-                        copy("MUSIK", "Musyik");
-                    }
+                    download("https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", "Musik_for_Stevany.zip");
                 }
+                while (wait(NULL) != childid)
+                    ;
 
-            } //berjalan 6 jam sebelumnya
+                childid = fork();
+                if (childid == 0)
+                {
+                    download("https://drive.google.com/uc?id=1ktjGgDkL0nNpY-vT7rT7O6ZI47Ke9xcp&export=download", "Film_for_Stevany.zip");
+                }
+                while (wait(NULL) != childid)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"unzip", "-q", "Foto_for_Stevany.zip", NULL};
+                    execv("/usr/bin/unzip", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"unzip", "-q", "Musik_for_Stevany.zip", NULL};
+                    execv("/usr/bin/unzip", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"unzip", "-q", "Film_for_Stevany.zip", NULL};
+                    execv("/usr/bin/unzip", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+            }
+            break;
         }
-        else
+    }
+
+    while (1)
+    {
+        t = time(NULL);
+        localDate = localtime(&t);
+        strftime(tgl, 50, "%Y-%m-%d %H:%M:%S", localDate);
+        if (strcmp(tgl, "2021-04-09 22:22:00") == 0)
         {
-            while ((wait(&status11)) > 0)
-                ;
-            pid_t child_id12;
-            int status12;
-
-            child_id12 = fork();
-            if (child_id12 < 0)
+            childid = fork();
+            if (childid == 0)
             {
-                exit(EXIT_FAILURE);
+                char *argv[] = {"mv", "FOTO", "Pyoto", NULL};
+                execv("/bin/mv", argv);
             }
 
-            if (child_id12 == 0)
-            {
-                sleep(5);
-                chdir("/home/kali/modul2/soal1/");
-                char *argv[] = {"zip", "-r", "Lopyu_Stevany.zip", "Fylm", "Musyik", "Pyoto", NULL};
-                execv("/usr/bin/zip", argv);
-                exit(0);
-            }
             else
             {
-                while ((wait(&status12)) > 0)
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "MUSIK", "Musyik", NULL};
+                    execv("/bin/mv", argv);
+                }
+                while (wait(NULL) != childid)
                     ;
-                chdir("/home/kali/modul2/soal1/");
-                sleep(5);
-                char *argv[] = {"rm", "-r", "-f", "FILM", "FOTO", "MUSIK", "Fylm", "Musyik", "Pyoto", NULL};
-                execv("/bin/rm", argv);
-            }
 
-        } //berjalan saat ultah
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "FILM", "Fylm", NULL};
+                    execv("/bin/mv", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"zip", "-r", "Lopyu_Stevany.zip", "Pyoto", "Musyik", "Fylm", NULL};
+                    execv("/usr/bin/zip", argv);
+                }
+
+                while ((wait(&status)) > 0)
+                    ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"rm", "-r", "FILM", "FOTO", "MUSIK", "Pyoto", "Fylm", "Musyik", NULL};
+                    execv("/bin/rm", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+            }
+            break;
+        }
     }
 }
