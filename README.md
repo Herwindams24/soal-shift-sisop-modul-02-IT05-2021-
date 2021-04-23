@@ -33,9 +33,13 @@ Adapun beberapa rincian soal yang diminta:
 
 ### Soal 1.a.
 
-### Asumsi Soal
-
 ### Pembahasan
+
+---
+## Soal 2
+
+---
+## Soal 3
 
 ---
 ## Kendala
