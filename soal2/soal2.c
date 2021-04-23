@@ -25,8 +25,8 @@ void createKategori(char *name)
     char folder[50] = "/home/ardha27/modul2/soal2/petshop/";
     sprintf(folder, "%s", name);
 
-    DIR *dir = opendir(name);
-    if (dir) {
+    DIR *dirp = opendir(name);
+    if (dirp) {
         return;
     }
 
@@ -42,13 +42,11 @@ void createKategori(char *name)
 void copyFoto(char *dir, char *nama_file, char *nama) {
     chdir("/home/ardha27/modul2/soal2/petshop/");
     char src[30];
+    char dst[40];
     sprintf(src, "%s", nama_file);
 
-    char dst[40];
     sprintf(dst, "%s/%s.jpg", dir, nama);
 
-    int status;
-    
     if (fork() == 0) {
         char *argv[] = {"cp", "-T", src, dst, NULL};
 
@@ -58,7 +56,21 @@ void copyFoto(char *dir, char *nama_file, char *nama) {
     wait(NULL);
 }
 
-void split()
+void keterangan(char *dir, char *pet, char *umur) {
+    char folder[50];
+    sprintf(folder, "%s/keterangan.txt", dir);
+
+    if (fork() == 0) {
+        FILE *dirp;
+        dirp = fopen(folder, "a");
+        fprintf(dirp, "nama : %s\numur : %s\n\n", pet, umur);
+        fclose(dirp);
+        exit(0);
+    }
+    wait(NULL);
+}
+
+void kelompok()
 {
     DIR *dirp;
     struct dirent *dent;
@@ -70,13 +82,14 @@ void split()
         } else if (dent->d_type == DT_DIR) {
             return;
         } else {
-            //printf("%s\n", dent->d_name);
+            
             char nama_file[50];
-            sprintf(nama_file, "%s", dent->d_name);
-
             char *split;
             char *folder[3];
+            
+            sprintf(nama_file, "%s", dent->d_name);
             split = strtok(dent->d_name, ";_");
+
             while (split != NULL) {
                 int i;
                 for (i = 0; i < 3; ++i) {
@@ -84,19 +97,20 @@ void split()
                     split = strtok(NULL, ";_");
                 }
                 
-                char *pet_dir = folder[0];
-                char *pet_name = folder[1];
-                // char *pet_age = folder[2];
+                char *jenis = folder[0];
+                char *nama = folder[1];
+                char *umur = folder[2];
 
-                // char *dot_jpg;
-                // dot_jpg = strstr(pet_age, ".jpg");
-                // if (dot_jpg != NULL) {
-                //     int pos = dot_jpg - pet_age;
-                //     sprintf(pet_age, "%.*s", pos, pet_age);
-                // }
-                createKategori(pet_dir);
+                char *dot;
+                dot = strstr(umur, ".jpg");
+                if (dot != NULL) {
+                    int pos = dot - umur;
+                    sprintf(umur, "%.*s", pos, umur);
+                }
+                createKategori(jenis);
                 sleep(1);
-                copyFoto(pet_dir, nama_file, pet_name);
+                copyFoto(jenis, nama_file, nama);
+                keterangan(jenis, nama, umur);
 
             }
 
@@ -145,5 +159,5 @@ int main() {
     extractZip();
     delete();
     sleep(2);
-    split();    
+    kelompok();    
 }
