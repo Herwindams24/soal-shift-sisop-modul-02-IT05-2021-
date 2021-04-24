@@ -202,6 +202,48 @@ while(1){
 ```
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
+### Soal 1.c
+Praktikan diminta melakukan peng-ekstrakan file yang telah di download.
+
+### Pembahasan
+Pada soal 1.c. penulis menyelesaikannya dengan bantuan dari fungsi fork() dan execv() dalam melakukan eksekusinya. Proses dijalankan oleh child process dengan variable childid. Parent process akan menunggu hingga child process selesai bekerja. Oleh karena itu kami menggunakan fungsi wait().
+
+```c
+while(1){
+ ...
+ else{
+  ...
+  childid = fork();
+  if (childid == 0)
+  {
+    char *argv[] = {"unzip", "-q", "Foto_for_Stevany.zip", NULL};
+    execv("/usr/bin/unzip", argv);
+  }
+  while (wait(NULL) != childid);
+
+  childid = fork();
+  if (childid == 0)
+  {
+    char *argv[] = {"unzip", "-q", "Musik_for_Stevany.zip", NULL};
+    execv("/usr/bin/unzip", argv);
+  }
+  while (wait(NULL) != childid);
+
+  childid = fork();
+  if (childid == 0)
+  {
+    char *argv[] = {"unzip", "-q", "Film_for_Stevany.zip", NULL};
+    execv("/usr/bin/unzip", argv);
+  }
+    while (wait(NULL) != childid);
+     }
+    break;
+  }
+}
+```
+
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
+
 ---
 ## Soal 2
 
