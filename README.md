@@ -51,13 +51,13 @@ Berikut merupakan 11 library yang penulis gunakan:
 ```
 
 * `<sys/types.h>` library tipe data khusus (e.g. `pid_t`)
-* `<sys/stat.h>` Library untuk melakukan mengembalikan status waktu (e.g. time_t())
+* `<sys/stat.h>` Library untuk melakukan mengembalikan status waktu (e.g. `time_t()`)
 * `<stdio.h>` library untuk fungsi input-output (e.g. `printf(), sprintf()`)
 * `<stdlib.h>` library untuk fungsi umum (e.g. `exit(), atoi()`)
-* `<fcntl.h>` library untuk proses id dalam proses kunci (e.g. pid_t())
+* `<fcntl.h>` library untuk proses id dalam proses kunci (e.g. `pid_t()`)
 * `<errno.h>` library brary untuk memberikan tambahan error pada sistem (e.g. ECHILD)
 * `<unistd.h>` library untuk melakukan system call kepada kernel linux (e.g. `fork()`)
-* `<syslog.h>` library library untuk mengirimkan pesan ke system logger
+* `<syslog.h>` library untuk mengirimkan pesan ke system logger
 * `<string.h>` library yang digunakan untuk mennagani string (e.g. `strncmp(), strcat()`)
 * `<time.h>` library untuk melakukan manipulasi date dan time (e.g. `time(), strftime()`)
 * `<wait.h>` Library untuk melakukan *wait* (e.g. `wait()`)
