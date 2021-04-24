@@ -286,7 +286,17 @@ while(1){
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
 ### Soal 1.e
-Pada soal 1.e, penulis diminta untuk melakukan otomisasi seluruh program berjalan (kecuali pada program zip file kembali dari file yang telah di download, ekstrak, dan dipindahkan ke folder sebagaimana mestinya) ketika waktu pada 9 April 2021 pukul 16:22:00 WIB GMT+7. 
+
+
+### Pembahasan
+
+```c
+
+```
+
+### Soal 1.f
+
+Pada soal 1.f, penulis diminta untuk melakukan otomisasi seluruh program berjalan (kecuali pada program zip file kembali dari file yang telah di download, ekstrak, dan dipindahkan ke folder sebagaimana mestinya) ketika waktu pada 9 April 2021 pukul 16:22:00 WIB GMT+7. 
 
 ### Pembahasan
 Pertama-tama, pada fungsi utama, penulis desklarasikan 3 variabel. Di mana variabel-variabel ini berfungsi menyimpan nilai tanggal dan nilai waktu. Konversi time_t ke tm sebagai localDate. Variable tm menyimpan timestamp yang sudah terstruktur sesuai dengan localtime.
@@ -315,6 +325,53 @@ while (1)
 ```
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
+
+### Soal 1.g
+Pada soal G, penulis diminta untuk menge-zip file dari folder yang telah di pindahkan pada Soal 1.e. dan penghapusan pada semua folder yang ada terkecuali pada file ekstensi `.zip`. Di mana proses ini terjadi pada pukul 22:22:00 WIB GMT+7
+
+### Pembahasan
+
+Pertama-tama, penulis membuat fungsi `while(1){}` kedua dan di dalam fungsi ini, penulis melakukan set waktu pada 09 April 2021 pukul 22:22:00 WIB GMT+7. Sebenarnya, secara konsep maupun cara hampir sama dengan yang ada pada [Soal 1.f.](#soal-1f).
+```c
+ while (1)
+    {
+        t = time(NULL);
+        localDate = localtime(&t);
+        strftime(tgl, 50, "%Y-%m-%d %H:%M:%S", localDate);
+        if (strcmp(tgl, "2021-04-09 22:22:00") == 0)
+        {...}
+     }
+```
+Selanjutnya, pada dasarnya soal ini masih menggunakan fungsi fork(), wait(), maupun execv. Yang membedakan adalah adanya command zip dengan argumen kedua -rm. Hal ini dimaksudkan proses zip atau peng-compressan selesai maka folder akan dihapus. Pada akhir fungsi terdapat statement `break` yang berfungsi untuk mengakhiri loop.
+```c
+ while (1)
+    {
+       ...
+        {
+        childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"zip", "-r", "Lopyu_Stevany.zip", "Pyoto", "Musyik", "Fylm", NULL};
+                    execv("/usr/bin/zip", argv);
+                }
+
+                while ((wait(&status)) > 0);
+            else
+            {
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"rm", "-r", "FILM", "FOTO", "MUSIK", "Pyoto", "Fylm", "Musyik", NULL};
+                    execv("/bin/rm", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+            }
+            break;
+         }
+     }
+```
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 ---
 ## Soal 2
 
