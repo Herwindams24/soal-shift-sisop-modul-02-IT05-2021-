@@ -30,13 +30,13 @@ Pada hari ulang tahun Stevany, Steven ingin memberikan Stevany zip berisikan hal
 Praktikan diminta untuk membuat sebuah program menggunakan Proses Daemon di mana program harus dapat berjalan pada tanggal 09 April 2021 serta pukul 16:22:00 dan pukul 22:22:00 WIB GMT+7. 
 
 Adapun beberapa rincian soal yang diminta:
-1.a. Membuat 3 folder dengan nama Musyik, Fylm, dan Pyoto
-1.b. Program dapat melakukan pengunduhan dari link drive yang tersedia pada soal.
-1.c. Meng-ekstrak (*unzip*) dari file .zip yang telah diunduh 
-1.d. Hapus file berekstensi selain .jpg pada folder hasil ekstrak Foto.zip
-1.e. Empat poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
-1.f. Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
-1.g. Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
+1.  Membuat 3 folder dengan nama Musyik, Fylm, dan Pyoto
+2.  Program dapat melakukan pengunduhan dari link drive yang tersedia pada soal.
+3.  Meng-ekstrak (*unzip*) dari file .zip yang telah diunduh 
+4.  Hapus file berekstensi selain **.jpg** pada folder hasil ekstrak Foto.zip
+5.  Empat poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
+6.  Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
+7.  Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
 
 ### Pembahasan
 
@@ -249,6 +249,70 @@ while(1){
 }
 ```
 
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
+### Soal 1.d
+Hapus semua file gambar yang berekstensi *.png* maupun *.jpeg* pada folder 'FOTO' yang merupakan hasil unzip pada file Foto_for_Stevany.zip. Hanya sisakan file yang berekstensi *.jpg*.
+
+### Pembahasan
+Pada soal 1.d. penulis menyelesaikannya dengan bantuan dari fungsi fork() dan execv() dalam melakukan eksekusinya. Pada baris kode program di bawah ini, terlihat bahwa array dari pointer char berisikan command untuk menemukan 'path' folder FOTO lalu melakukan delete semua file kecuali yang berekstensi *.jpg*. 
+
+```c
+while(1){
+ ...
+ else{
+  ...
+  childid = fork();
+    if (childid == 0)
+    {
+     sleep (15);
+     char *argv[] = {"find", 
+                     "/home/kali/modul2/soal1/FOTO", 
+                     "-type", 
+                     "f", 
+                     "!", 
+                     "-iname", 
+                     "\*.jpg", 
+                     "-delete", 
+                     NULL
+                     };
+     execv("/usr/bin/find", argv);
+     }
+     while (wait(NULL) != childid);
+   }
+    break;
+  }
+}
+```
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
+
+### Soal 1.e
+Pada soal 1.e, penulis diminta untuk melakukan otomisasi seluruh program berjalan (kecuali pada program zip file kembali dari file yang telah di download, ekstrak, dan dipindahkan ke folder sebagaimana mestinya) ketika waktu pada 9 April 2021 pukul 16:22:00 WIB GMT+7. 
+
+### Pembahasan
+Pertama-tama, pada fungsi utama, penulis desklarasikan 3 variabel. Di mana variabel-variabel ini berfungsi menyimpan nilai tanggal dan nilai waktu. Konversi time_t ke tm sebagai localDate. Variable tm menyimpan timestamp yang sudah terstruktur sesuai dengan localtime.
+```c
+int main()
+{
+    char tgl[50];
+    time_t t;
+    struct tm *localDate;
+    ...
+}
+```
+Selanjutnya, di dalam While Big Loop, penulis mengeset waktu saat ini variable t dengan fungsi time(NULL). Di sini penulis juga menggunakan *strftime* untuk format waktu/ tanggal lokal menurut local settings. Lalu buatlah fungsi `if()` dengan parameter `strcmp(tgl, "2021-04-09 16:22:00") == 0`, di mana jika perbandingan dua string tersebut mengembalikan nilai 0, maka jalankan kode yang ada di dalam tubuh if.
+```c
+while (1)
+    {
+        t = time(NULL);
+        localDate = localtime(&t);
+        strftime(tgl, 50, "%Y-%m-%d %H:%M:%S", localDate);
+        if (strcmp(tgl, "2021-04-09 16:22:00") == 0)
+        {
+         ...
+         break;
+        }
+    }
+```
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
 ---
