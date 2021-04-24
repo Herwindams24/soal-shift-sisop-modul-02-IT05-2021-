@@ -82,6 +82,20 @@ if (parentid > 0)
 *Note:  Fungsi `fork()` menghasilkan parent process dengan variable parentid yang berisi PID dari child process dan
 child process dengan variable parentid berisi nilai 0. Selanjutnya, parent process akan dikeluarkan dengan fungsi exit() bersama dengan statusnya.*
 
+Lalu ubah mode file dengan `umask(0)`
+``` c
+umask(0);
+```
+
+Selanjutnya, membuat Unique Session ID (SID)
+ ```c
+ sid = setsid();
+    if (sid < 0)
+    {
+        exit(EXIT_FAILURE);
+    }
+```
+
 ### Soal 1.a.
 
 ### Pembahasan
