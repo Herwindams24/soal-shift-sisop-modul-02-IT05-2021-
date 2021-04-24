@@ -85,32 +85,28 @@ int main()
                 {
                     createDir("Pyoto");
                 }
-                while (wait(NULL) != childid)
-                    ;
+                while (wait(NULL) != childid);
 
                 childid = fork();
                 if (childid == 0)
                 {
                     createDir("Fylm");
                 }
-                while (wait(NULL) != childid)
-                    ;
+                while (wait(NULL) != childid);
 
                 childid = fork();
                 if (childid == 0)
                 {
                     download("https://drive.google.com/uc?id=1FsrAzb9B5ixooGUs0dGiBr-rC7TS9wTD&export=download", "Foto_for_Stevany.zip");
                 }
-                while (wait(NULL) != childid)
-                    ;
+                while (wait(NULL) != childid);
 
                 childid = fork();
                 if (childid == 0)
                 {
                     download("https://drive.google.com/uc?id=1ZG8nRBRPquhYXq_sISdsVcXx5VdEgi-J&export=download", "Musik_for_Stevany.zip");
                 }
-                while (wait(NULL) != childid)
-                    ;
+                while (wait(NULL) != childid);
 
                 childid = fork();
                 if (childid == 0)
