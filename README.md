@@ -10,6 +10,12 @@ Kelompok IT05
 
 * [Soal 1](#soal-1)
   * [Soal 1.a.](#soal-1a)
+  * [Soal 1.b.](#soal-1b)
+  * [Soal 1.c.](#soal-1c)
+  * [Soal 1.d.](#soal-1d)
+  * [Soal 1.e.](#soal-1e)
+  * [Soal 1.f.](#soal-1f)
+  * [Soal 1.g.](#soal-1g)
 * [Soal 2](#soal-2)
   * [Soal 2.a.](#soal-2a)
 * [Soal 3](#soal-3)
@@ -24,12 +30,13 @@ Pada hari ulang tahun Stevany, Steven ingin memberikan Stevany zip berisikan hal
 Praktikan diminta untuk membuat sebuah program menggunakan Proses Daemon di mana program harus dapat berjalan pada tanggal 09 April 2021 serta pukul 16:22:00 dan pukul 22:22:00 WIB GMT+7. 
 
 Adapun beberapa rincian soal yang diminta:
-1. Membuat 3 folder dengan nama Musyik, Fylm, dan Pyoto
-2. Program dapat melakukan pengunduhan dari link drive yang tersedia pada soal.
-3. Meng-ekstrak (*unzip*) dari file .zip yang telah diunduh 
-4. Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
-5. Empat poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
-6. Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
+1.a. Membuat 3 folder dengan nama Musyik, Fylm, dan Pyoto
+1.b. Program dapat melakukan pengunduhan dari link drive yang tersedia pada soal.
+1.c. Meng-ekstrak (*unzip*) dari file .zip yang telah diunduh 
+1.d. Hapus file berekstensi selain .jpg pada folder hasil ekstrak Foto.zip
+1.e. Empat poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
+1.f. Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
+1.g. Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
 
 ### Pembahasan
 
