@@ -250,6 +250,7 @@ while(1){
 ```
 
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
+
 ### Soal 1.d
 Hapus semua file gambar yang berekstensi *.png* maupun *.jpeg* pada folder 'FOTO' yang merupakan hasil unzip pada file Foto_for_Stevany.zip. Hanya sisakan file yang berekstensi *.jpg*.
 
@@ -286,13 +287,48 @@ while(1){
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
 ### Soal 1.e
-
+Pada soal d, penulis diminta untuk memindahkan (*move*) file-file yang telah diunzip ke dalam folder yang telah dibuat pada nomor 1.a. 
 
 ### Pembahasan
-
+Seeperti yang ada di video contoh, proses move berjalan pada pukul 22:22 WIB GMT+7. Oleh karena itu, proses ini masuk ke dalam while big-loop yang ke-dua. Untuk eksekusinya, sama seperti proses yang sudah dijelaskan sebelumnya, di sini penulis menggunakan fungsi `fork()`, `wait()`, dan execv untuk melaksanakan eksekusinya.
 ```c
+while (1)
+    {
+        ...
+        if (strcmp(tgl, "2021-04-09 22:22:00") == 0)
+        {
+            childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "MUSIK", "Musyik", NULL};
+                    execv("/bin/mv", argv);
+                }
+            else
+            {
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "FILM", "Fylm", NULL};
+                    execv("/bin/mv", argv);
+                }
+                while (wait(NULL) != childid);
 
+               
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "FOTO", "Pyoto", NULL};
+                    execv("/bin/mv", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
+                ...
+                }
+            break;
+        }
+    }
 ```
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
 ### Soal 1.f
 
