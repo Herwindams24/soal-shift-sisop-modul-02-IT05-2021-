@@ -146,6 +146,25 @@ int main()
                 }
                 while (wait(NULL) != childid)
                     ;
+
+                childid = fork();
+                if (childid == 0)
+                {
+                    sleep (15);
+                    char *argv[] = {"find", 
+                                    "/home/kali/modul2/soal1/FOTO", 
+                                    "-type", 
+                                    "f", 
+                                    "!", 
+                                    "-iname", 
+                                    "\*.jpg", 
+                                    "-delete", 
+                                    NULL
+                                };
+                    execv("/usr/bin/find", argv);
+                }
+                while (wait(NULL) != childid)
+                    ;
             }
             break;
         }
@@ -159,27 +178,26 @@ int main()
         if (strcmp(tgl, "2021-04-09 22:22:00") == 0)
         {
             childid = fork();
-            if (childid == 0)
-            {
-                char *argv[] = {"mv", "FOTO", "Pyoto", NULL};
-                execv("/bin/mv", argv);
-            }
-
-            else
-            {
-                childid = fork();
                 if (childid == 0)
                 {
                     char *argv[] = {"mv", "MUSIK", "Musyik", NULL};
                     execv("/bin/mv", argv);
                 }
-                while (wait(NULL) != childid)
-                    ;
-
+            else
+            {
                 childid = fork();
                 if (childid == 0)
                 {
                     char *argv[] = {"mv", "FILM", "Fylm", NULL};
+                    execv("/bin/mv", argv);
+                }
+                while (wait(NULL) != childid);
+
+               
+                childid = fork();
+                if (childid == 0)
+                {
+                    char *argv[] = {"mv", "FOTO", "Pyoto", NULL};
                     execv("/bin/mv", argv);
                 }
                 while (wait(NULL) != childid)
@@ -191,9 +209,7 @@ int main()
                     char *argv[] = {"zip", "-r", "Lopyu_Stevany.zip", "Pyoto", "Musyik", "Fylm", NULL};
                     execv("/usr/bin/zip", argv);
                 }
-
-                while ((wait(&status)) > 0)
-                    ;
+                while ((wait(&status)) > 0);
 
                 childid = fork();
                 if (childid == 0)
