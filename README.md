@@ -372,6 +372,7 @@ Selanjutnya, pada dasarnya soal ini masih menggunakan fungsi fork(), wait(), mau
      }
 ```
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
+
 ---
 ## Soal 2
 
