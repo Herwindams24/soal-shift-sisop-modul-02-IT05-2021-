@@ -34,9 +34,9 @@ Adapun beberapa rincian soal yang diminta:
 2.  Program dapat melakukan pengunduhan dari link drive yang tersedia pada soal.
 3.  Meng-ekstrak (*unzip*) dari file .zip yang telah diunduh 
 4.  Hapus file berekstensi selain **.jpg** pada folder hasil ekstrak Foto.zip
-5.  Empat poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
-6.  Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
-7.  Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
+5.  Memindahkan file yang telah diekstrak ke dalam folder yang telah dibuat pada point nomor 1.
+7.  Lima poin di atas harus dapat berjalan secara otomisasi pada 6 jam sebelum ulang tahun dari Stevany, yang mana ulang tahun dari Stevany adalah 9 April pukul 22:22:00 WIB GMT+7. Sehingga dijalankan pada pukul 16:22:00 WIB GMT+7
+8.  Pada saat waktu ulang tahun Stevany semua folder yang telah dibuat dan terisi di *zip* dengan nama Lopyu_Stevany.zip dan selain folder dengan eksternsi `.zip` maka akan terhapus.
 
 ### Pembahasan
 
