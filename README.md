@@ -1114,6 +1114,23 @@ Pada soal 3.e. penulis mengalami kendala akibat program killer.sh yang tidak ber
 
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)*
 
+##Dokumentasi Program
+
+### Screenshoot program saat berjalan dalam terminal
+![image](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/img/program%20saat%20dijalankan%20soal%203.jpg)
+
+### Screenshoot direktori yang terbentuk setelah program dijalankan
+![image](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/img/direktori%20yang%20terbentuk%20setelah%20program%20dijalankan%20soal%203.jpg)
+
+### Screenshoot isi zip yang terbentuk
+![image](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/img/Isi%20zip%20soal%203.jpg)
+
+### Screenshoot isi direktori yang terbentuk dalam direktori zip
+![image](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/img/isi%20zip%20soal%203%20dalam%20direktori.jpg)
+
+### Screenshoot gambar yang berhasil terunduh dengan ukuran sesuai dengan ketentuan program yang dijalankan
+![image](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/img/hasil%20gambar%20yang%20terunduh%20soal%203.jpg)
+
 ---
 ## Kendala
 Soal:
