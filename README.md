@@ -865,6 +865,254 @@ void kelompok()
 
 ---
 ## Soal 3
+## Soal 3
+Source Code : [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)
+
+### Deskripsi Soal
+Ranora yang sedang menjalani magang di perusahaan “FakeKos Corp.” diminta untuk membuat sebuah program yang mendownload kumpulan foto dari website https://picsum.photos/ dan membuat folder dengan format nama berdasarkan timestamp yang kemudian di zip. 
+
+### Asumsi Soal
+Praktikan diminta untuk membuat sebuah program yang menerima parameter untuk menentukan penjalanan program antara dua mode, kemudian ketika berjalan secara automatis melakukan proses download, folder filtering, melakukan zip, mengirimkan status update dengan enkripsi caesar cipher, serta dapat men-generate program killer yang dapat menterminasi semua proses yang sedang berjalan dan akan menghapus dirinya sendiri setelah program dijalankan.
+
+Adapun beberapa rincian soal yang diminta:
+1.  Membuat sebuah program yang dimana setiap 40 detik membuat sebuah direktori dengan nama sesuai timestamp [YYYY-mm-dd_HH:ii:ss].
+2.  Program dapat melakukan pengunduhan foto dari link yang tersedia pada soal dengan format nama timestamp serta berbentuk persegi dengan ukuran (n%1000)+50 pixel dimana n adalah detik epoch unix.
+3.  Membuat sebuah file “status.txt”, dimana di dalamnya berisi pesan “Download Success” yang terenkripsi dengan metode Caesar Cipher shift 5.
+4. Men-zip direktori yang telah dibuat dan mendelete direktori lama sehingga hanya tersisa file zip saja.
+5. Men-generate program “Killer” yang executable, dimana program bash tersebut menterminasi semua program yang sedang berjalan dan menghapus dirinya sendiri setelah program dijalankan.
+6. Program yang dibuat dapat dijalankan dalam dua mode. mode pertama dijalankan dengan menerima arguman -z dimana program utama akan langsung menghentikan semua operasi ketika program killer dijalankan. Mode kedua dijalankan dengan menerima argumen -x dimana program utama menyelesaikan dahulu proses di direktori yang berjalan hingga selesai baru menghentikan operasi.
+
+### Pembahasan
+
+Untuk membuat program C yang berjalan di background, pertama harus melakukan atau mengimport #include terhadap library yang diperlukan. 
+Berikut merupakan 12 library yang penulis gunakan:
+
+``` c
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <wait.h>
+#include <string.h>
+#include <dirent.h>
+#include <time.h>
+#include <errno.h>
+#include <fcntl.h>
+```
+
+* `<stdlib.h>` library untuk fungsi umum (e.g. `exit()`, `atoi()`)
+* `<sys/types.h>` library tipe data khusus (e.g. `pid_t`)
+* `<sys/stat.h>` library untuk melakukan mengembalikan status waktu (e.g. `time_t()`)
+* `<unistd.h>` library untuk melakukan system call kepada kernel linux (e.g. `fork()`)
+* `<stdio.h>` library untuk fungsi input-output (e.g. `printf(), sprintf()`)
+* `<wait.h>` library untuk melakukan *wait* (e.g. `wait()`)
+* `<string.h>` library yang digunakan untuk mennagani string (e.g. `strncmp()`, `strcat()`)
+* `<dirent.h>` library untuk proses directory traversing dalam program
+* `<time.h>` library untuk melakukan manipulasi date dan time (e.g. `time()`, `strftime()`)
+* `<errno.h>` library untuk memberikan tambahan error pada sistem (e.g. ECHILD)
+* `<fcntl.h>` library untuk proses id dalam proses kunci (e.g. `pid_t()`)
+
+Dikarenakan pada soal proses program C yang dijalankan harus berjalan di latar belakang, maka kami harus membuat program ini menjadi sebuah daemon process sebagai berikut:
+``` c
+pid_t parentid, sid;
+int status;
+
+parentid = fork();
+
+if (parentid < 0)
+{
+  exit(EXIT_FAILURE);
+}
+if (parentid > 0)
+{
+  exit(EXIT_SUCCESS);
+}
+```
+
+*Note:  Fungsi `fork()` menghasilkan parent process dengan variable parentid yang berisi PID dari child process dan
+child process dengan variable parentid berisi nilai 0. Selanjutnya, parent process akan dikeluarkan dengan fungsi exit() bersama dengan statusnya.*
+
+### Soal 3.a
+membuat sebuah program C yang dimana setiap 40 detik membuat
+sebuah direktori dengan nama sesuai timestamp [YYYY-mm-dd_HH:ii:ss].
+
+### Pembahasan
+Pada soal 3.a. penulis menyelesaikannya dengan bantuan dari strftime() yang berfungsi untuk memasukkan waktu saat pembuatan file ataupun folder dan menyimpannya dalam variabel buffer. Adapun dalam mengeksekusinya juga digunakan fungsi sleep() untuk mengatur agar program mengeksekusi pembuatan direkturi tiap 40s. Adapun sourcecode yang dibuat dapat dilihat pada kolom dibawah.
+
+```c
+while (1)
+{
+    pid_t child1, child2, child3, child4;
+    int status;
+ 
+    time_t now;
+    struct tm *t;
+    char buffer[80];
+ 
+    time(&now);
+    t = localtime(&now);
+ 
+    strftime(buffer, 80, "%Y-%m-%d_%H:%M:%S", t);
+    // puts (buffer);
+    char *dir = buffer;
+    mkdir(dir, 0777);
+ 
+    child1 = fork();
+    if (child1 < 0)
+        exit(EXIT_FAILURE);
+…
+ while (wait(&status) > 0)
+        ;
+    sleep(40);
+```
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)*
+
+### Soal 3.b
+Setiap direktori yang sudah dibuat diisi dengan 10 gambar yang didownload dari
+https://picsum.photos/, dimana setiap gambar akan didownload setiap 5 detik. Setiap
+gambar yang didownload akan diberi nama dengan format timestamp
+[YYYY-mm-dd_HH:ii:ss] dan gambar tersebut berbentuk persegi dengan ukuran
+(n%1000) + 50 pixel dimana n adalah detik Epoch Unix.
+
+### Pembahasan
+Pada soal 3.b. penulis menyelesaikannya dengan bantuan fungsi wget untuk melakukan fungsi download dan sprintf untuk menyimpan link download ke dalam variabel *link*. Kemudian melakukan penamaan dengan memanfaatkan variabel fileti untuk memuat waktu file didownload dan dijadikan nama file tersebut. Adapun berikut sourcecode yang dilakukan untuk menjalankan program yang ada:
+
+```c
+    if (child1 == 0)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            if (fork() == 0)
+            {
+                unsigned long get_time = (unsigned long)time(NULL);
+                get_time = (get_time % 1000) + 50;
+ 
+                char link[50];
+                sprintf(link, "https://picsum.photos/%ld", get_time);
+ 
+                time_t filet;
+                struct tm *fileti;
+                char files[80] = "";
+                char down_dir[100];
+ 
+                time(&filet);
+                fileti = localtime(&filet);
+ 
+                strftime(files, 80, "%Y-%m-%d_%H:%M:%S", fileti);
+                sprintf(down_dir, "%s/%s", buffer, files);
+                // puts(down_dir);
+ 
+                char *argv[] = {"wget", "-O", down_dir, link, NULL};
+                execv("/usr/bin/wget", argv);
+                exit(0);
+            }
+            sleep(5);
+        }
+        for (int i = 0; i < 10; i++)
+            wait(NULL);
+    }
+
+```
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)*
+
+### Soal 3.c
+Tiap direktori terisi 10 gambar program akan membuat file “status.txt” yang akan memuat pesan “download success” terinkripsi dengan caesar cipher shift 5 dan kemudian melakukan zip direktori dan mendelete direktori yang ada sehingga menyisakan file zip saja.
+
+### Pembahasan
+Pada soal 3.c. penulis mengalami kendala dalam membuat file status.txt yang berisi pesan terenkripsi sehingga tidak dapat dilakukan. Untuk melakukan zip dan delete directory, penulis memasukannya dalam child2 dan memanfaatkan variabel buffer yang sudah dibuat di awal untuk melakukan rename terhadap zip yang sudah dibuat. Adapun sourcecode yang digunakan dalam menjalankan program adalah sebagai berikut:
+
+```c
+
+    child2 = fork();
+    if (child2 < 0)
+        exit(EXIT_FAILURE);
+ 
+    if (child2 == 0)
+    {
+        char zip_name[100];
+        sprintf(zip_name, "%s.zip", buffer);
+ 
+        char *argv[] = {"zip", "-rm", zip_name, buffer, NULL};
+        execv("/usr/bin/zip", argv);
+        exit(0);
+    }
+```
+### Soal 3.d
+men-generate sebuah program “Killer” yang executable, dimana
+program tersebut akan menterminasi semua proses program yang sedang berjalan dan
+akan menghapus dirinya sendiri setelah program dijalankan. Karena Ranora menyukai
+sesuatu hal yang baru, maka Ranora memiliki ide untuk program “Killer” yang dibuat
+nantinya harus merupakan program bash.
+
+### Pembahasan
+Pada soal 3.c. penulis mengalami kendala dalam men-generate program killer sehingga program mengalami infinit loop dan terus melakukan download serta pembuatan zip. Penulis mencoba menanamkan program c di dalam program untuk men-generate namun tidak berhasil berjalan. Adapun percobaan source code yang digunakan adalah sebagai berikut:
+
+```c
+   sprintf(src, "%s/killer.sh", cwd);
+        sprintf(dst, "%s/killer", cwd);
+ 
+        sprintf(files, "%s/killer.sh", cwd);
+ 
+        if (argv[1][1] == 'z')
+            strcpy(mode, " char *argv[] = {\"killall\", \"-s\", \"9\", \"soal2\", NULL};");
+        else if (argv[1][1] == 'x')
+            sprintf(mode, " char *argv[] = {\"kill\", \"%d\", NULL};", pid2);
+ 
+        sprintf(data, "#include <stdlib.h>\n"
+                      "#include <sys/types.h>\n"
+                      "#include <unistd.h>\n"
+                      "#include <stdio.h>\n"
+                      "#include <wait.h>\n"
+                      "#include <string.h>\n"
+ 
+                      " int main() {"
+                      " pid_t child_id;"
+                      " int status;"
+ 
+                      " child_id = fork();"
+                      " if (child_id < 0) exit(EXIT_FAILURE);"
+ 
+                      " if (child_id == 0) {"
+                      " %s"
+                      " execv(\"/usr/bin/killall\", argv);"
+                      " } else {"
+                      " while (wait(&status)>0);"
+                      " }"
+                      " }",
+                mode);
+ 
+        ptr = fopen(files, "w");
+        fputs(data, ptr);
+        fclose(ptr);
+ 
+        char *argv[] = {"gcc", src, "-o", dst, NULL};
+        execv("/usr/bin/gcc", argv);
+    }
+```
+
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)*
+
+### Soal 3.e
+Program utama dapat dijalankan di dalam dua mode. Untuk mengaktifkan mode pertama, program harus dijalankan dengan argumen -z, dan Ketika dijalankan dalam mode pertama, program utama akan langsung menghentikan semua operasinya Ketika program Killer dijalankan. Sedangkan untuk mengaktifkan mode kedua, program harus dijalankan dengan
+argumen -x, dan Ketika dijalankan dalam mode kedua, program utama akan berhenti namun membiarkan proses di setiap direktori yang masih berjalan hingga selesai (Direktori yang sudah dibuat akan mendownload gambar sampai selesai dan membuat file txt, lalu zip dan delete direktori).
+
+
+### Pembahasan
+Pada soal 3.e. penulis mengalami kendala akibat program killer.sh yang tidak berjalan sehingga ketika diberi parameter program tetap menjalankan infinit loop, adapun penulis mencoba menuliskan sourcecode sebagi berikut sehingga program dapat menerima argumen -z dan -x untuk menjalankan program dan mengeluarkan pesan “argumen hanya -z atau -x” bila diberi argumen lain:
+
+```c
+
+    if (argc != 2 || argv[1][1] != 'z' && argv[1][1] != 'x')
+        printf("argumen hanya -z atau -x");
+…
+        if (argv[1][1] == 'z')
+            strcpy(mode, " char *argv[] = {\"killall\", \"-s\", \"9\", \"soal2\", NULL};");
+        else if (argv[1][1] == 'x')
+            sprintf(mode, " char *argv[] = {\"kill\", \"%d\", NULL};", pid2);
+```
+
+*Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal3.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal3/soal3.c)*
 
 ---
 ## Kendala
