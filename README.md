@@ -20,6 +20,7 @@ Kelompok IT05
   * [Soal 2.a.](#soal-2a)
 * [Soal 3](#soal-3)
   * [Soal 3.a.](#soal-3a)
+* [Kendala](#Kendala)
 ---
 ## Soal 1
 Source Code : [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)
@@ -409,6 +410,26 @@ Selanjutnya, pada dasarnya soal ini masih menggunakan fungsi fork(), wait(), mau
 ```
 *Note: Tanda `...` merupakan kode program yang tidak ditampilkan untuk memudahkan pembacaan. Kode program lengkap dapat dilihat pada [soal1.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal1/soal1.c)*
 
+## Dokumentasi Program
+
+### Screenshoot konfigurasi waktu eksekusi program
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Konfigurasi%20Waktu%20dan%20Eksekusi_02.png)
+
+### Screenshoot proses run program pada pukul 16:22:00
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Eksekusi%20Program1.png)
+
+### Screenshoot filtering .jpg
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/FilteringJPG.png)
+
+### Screenshoot hasil eksekusi program pada 9 April 2021 pukul 16:22:00
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Hasil%20Eksekusi%20Pukul16.png)
+
+### Screenshoot proses run program pada pukul 22:22:00
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Eksekusi%20Program2.png)
+
+### Screenshoot hasil eksekusi program pada 9 April 2021 pukul 22:22:00
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Hasil%20Eksekusi%20Pukul%2022.png)
+
 ---
 ## Soal 2
 
@@ -418,7 +439,7 @@ Selanjutnya, pada dasarnya soal ini masih menggunakan fungsi fork(), wait(), mau
 ---
 ## Kendala
 Soal:
- * Soal 1: Tidak dapat mengeset waktu dan terdapat kendala dalam mendownload file
+ * Soal 1: Tidak dapat mengeset waktu dan terdapat kendala dalam mendownload file serta tidak dapat melakukan filtering file .jpg (Sebelum Revisi)
  * Soal 2: Tidak dapat memindahkan folder dengan ketentuan yang sesuai 
  * Soal 3: Tidak dapat mengesekusi fungsi killer dan tidak dapat membuat file status.txt dengan enkripsi Caesar Cipher setiap berhasil membuat zip
 
