@@ -432,6 +432,430 @@ Selanjutnya, pada dasarnya soal ini masih menggunakan fungsi fork(), wait(), mau
 
 ---
 ## Soal 2
+Source Code : [soal2.c](https://github.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/blob/main/soal2/soal2.c)
+
+### Deskripsi Soal
+Loba bekerja di sebuah petshop terkenal, suatu saat dia mendapatkan zip yang berisi banyak sekali foto peliharaan dan Ia diperintahkan untuk mengkategorikan foto-foto peliharaan tersebut. 
+### Asumsi Soal
+Praktikan diminta untuk membantu Loba dalam mengkategorikan foto-foto peliharaan yang terdapat di dalam Zip.
+
+Adapun beberapa rincian soal yang diminta:
+1.  Membuat folder petshop
+2.  Meng-ekstrak (*unzip*) dari file .zip yang diberikan
+3.  Hapus folder-folder tidak penting yang terdapat di dalam .zip
+4.  Melakukan pemotongan nama file pada .zip yang telah diberikan untuk mempermudah langkah kedepannya.
+5.  Membuat folder untuk tiap jenis peliharaan
+6.  Mengkategorikan foto-foto peliharaan ke dalam folder yang telah dibuat dan di rename dengan nama peliharaan
+7.  Membuat keterangan.txt pada masing-masing folder yang berisi nama dan umur semua peliharaan dalam folder tersebut
+
+### Pembahasan
+
+Untuk membuat program C yang berjalan di background, pertama harus melakukan atau mengimport #include terhadap library yang diperlukan. 
+Berikut merupakan 8 library yang penulis gunakan:
+
+``` c
+#include <stdlib.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <wait.h>
+#include <string.h>
+#include <dirent.h>
+```
+
+* `<stdlib.h>` library untuk fungsi umum (e.g. `exit()`, `atoi()`)
+* `<sys/types.h>` library tipe data khusus (e.g. `pid_t`)
+* `<sys/stat.h>` library untuk melakukan mengembalikan status waktu (e.g. `time_t()`)
+* `<unistd.h>` library untuk melakukan system call kepada kernel linux (e.g. `fork()`)
+* `<stdio.h>` library untuk fungsi input-output (e.g. `printf(), sprintf()`)
+* `<wait.h>` library untuk melakukan *wait* (e.g. `wait()`)
+* `<string.h>` library yang digunakan untuk mennagani string (e.g. `strncmp()`, `strcat()`)
+* `<dirent.h>` library untuk melakukan traverse direktori (e.g. `opendir()`)
+
+### Soal 2.a.
+Pada soal 2.a, praktikan diminta untuk membuat directory petshop. Direktori ini dibuat dengan fungsi `wait()`, `fork()` dan `exec()`
+### Pembahasan
+Pertama-tama, penulis membuat sebuah fungsi `void createDir()` yang nantinya akan dipanggil pada `int main()` untuk membuat directory yang diminta.
+
+``` c
+void createDir()
+{
+    char dir[50] = "/home/ardha27/modul2/soal2/petshop";
+
+    if(fork() == 0)
+      {
+          char *argv[] = {"mkdir", "-p", dir, NULL};
+          execv("/bin/mkdir", argv);
+          exit(0);
+      }
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void createDir()` akan dipanggil pada `int main()`
+``` c
+int main() {
+    createDir();
+    extractZip();
+    delete();
+    sleep(2);
+    kelompok();    
+}
+```
+
+### Soal 2.b.
+Pada soal 2.b, praktikan diminta untuk mengekstrak file .zip yang telah diberikan. Proses ekstrak ini dilakukan dengan fungsi `wait()`, `fork()` dan `exec()`
+### Pembahasan
+Selnajutnya, penulis membuat sebuah fungsi `void extractZip()` yang nantinya akan dipanggil `int main()` untuk mengesktrak .zip yang diberikan.
+``` c
+void extractZip()
+{
+    char dir[50] = "/home/ardha27/modul2/soal2/petshop";
+    char temp[50] = "/home/ardha27/modul2/soal2/pets.zip";
+ 
+    if(fork() == 0)
+      {
+          char *argv[] = {"unzip", temp, "-d", dir, NULL};
+          execv("/usr/bin/unzip", argv);
+          exit(0);
+      }
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void extractZip()` akan dipanggil pada `int main()`
+``` c
+int main() {
+    createDir();
+    extractZip();
+    delete();
+    sleep(2);
+    kelompok();    
+}
+```
+
+### Soal 2.c.
+Pada soal 2.c, praktikan diminta untuk menghapus folder tidak penting yang terdapat di dalam .zip yang diberikan. Proses penghapusan ini dilakukan dengan fungsi `opendir()`, `readdir`, `strcmp()`, `wait()`, `fork()`, dan `exec()`
+### Pembahasan
+Untuk menghapus folder tidak penting, penulis membuat sebuah fungsi `void delete()` yang nantinya akan dipanggil pada `int main()` untuk menghapus directory yang diminta.
+``` c
+void delete() {
+    DIR * dirp;
+    struct dirent * dent;
+    dirp = opendir("/home/ardha27/modul2/soal2/petshop");
+
+    while ((dent = readdir(dirp)) != NULL) {
+        if(strcmp(dent->d_name,".") == 0 || strcmp(dent->d_name,"..") == 0) {
+            //kosong
+            }else if (dent->d_type == DT_DIR) {
+                chdir("/home/ardha27/modul2/soal2/petshop");
+                if(fork() == 0)
+                {
+                    char *argv[] = {"rm", "-rf", dent->d_name, NULL};
+                    execv("/bin/rm", argv);
+                    exit(0);
+                }
+            }
+    }
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void delete()` akan dipanggil pada `int main()`
+``` c
+int main() {
+    createDir();
+    extractZip();
+    delete();
+    sleep(2);
+    kelompok();    
+}
+```
+
+### Soal 2.d.
+Pada soal 2.d, praktikan diminta untuk memotong nama file pada tiap foto peliharaan agar mempermudah proses kedepannya. Proses ini dilakukan dengan fungsi `opendir()`, `readdir`, `strcmp()`, `sprintf()`, `strstr()`, `strtok()`, dan `sleep()`
+### Pembahasan
+Penulis membuat sebuah fungsi `void kelompok()` yang nantinya akan memotong nama file pada tiap foto peliharaan sehingga didapat jenis hewan, nama, dan umur dari tiap peliharaan. Lalu, hasil pemotongan tadi akan digunakan sebagai parameter pada fungsi-fungsi kedepannya.
+``` c
+void kelompok()
+{
+    DIR *dirp;
+    struct dirent *dent;
+    dirp = opendir("/home/ardha27/modul2/soal2/petshop");
+    while (dent = readdir(dirp))
+    {
+        if(strcmp(dent->d_name,".") == 0 || strcmp(dent->d_name,"..") == 0) {
+
+        } else if (dent->d_type == DT_DIR) {
+            return;
+        } else {
+            
+            char nama_file[50];
+            char *split;
+            char *folder[3];
+            
+            sprintf(nama_file, "%s", dent->d_name);
+            split = strtok(dent->d_name, ";_");
+
+            while (split != NULL) {
+                int i;
+                for (i = 0; i < 3; ++i) {
+                    folder[i] = split;
+                    split = strtok(NULL, ";_");
+                }
+                
+                char *jenis = folder[0];
+                char *nama = folder[1];
+                char *umur = folder[2];
+
+                char *dot;
+                dot = strstr(umur, ".jpg");
+                if (dot != NULL) {
+                    int pos = dot - umur;
+                    sprintf(umur, "%.*s", pos, umur);
+                }
+                createKategori(jenis);
+                sleep(1);
+                copyFoto(jenis, nama_file, nama);
+                keterangan(jenis, nama, umur);
+
+            }
+
+        }
+
+    }
+}
+```
+
+### Soal 2.e.
+Pada soal 2.e, praktikan diminta untuk membuat folder untuk tiap jenis peliharaan. Pembuatan direktori ini dilakukan dengan fungsi `wait()`, `fork()`, dan `exec()`
+### Pembahasan
+Untuk membuat folder tiap jenis peliharaan, penulis membuat sebuah fungsi `void createKategori(char *name)` yang nantinya akan dipanggil pada `void kelompok()` untuk membuat directory yang diminta.
+``` c
+void createKategori(char *name)
+{
+    char folder[50] = "/home/ardha27/modul2/soal2/petshop/";
+    sprintf(folder, "%s", name);
+
+    DIR *dirp = opendir(name);
+    if (dirp) {
+        return;
+    }
+
+    if(fork() == 0)
+      {
+          char *argv[] = {"mkdir", "-p", folder, NULL};
+          execv("/bin/mkdir", argv);
+          exit(0);
+      }
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void createKategori(char *name)` akan dipanggil pada `void kelompok()`. Didalam `void kelompok()` dilakukan pemotongan pada nama tiap file sehingga didapatkan seluruh jenis peliharaan yang terdapat di dalam .zip dan dijadikan parameter untuk `void createKategori(char *name)`
+``` c
+void kelompok()
+{
+    DIR *dirp;
+    struct dirent *dent;
+    dirp = opendir("/home/ardha27/modul2/soal2/petshop");
+    while (dent = readdir(dirp))
+    {
+        if(strcmp(dent->d_name,".") == 0 || strcmp(dent->d_name,"..") == 0) {
+
+        } else if (dent->d_type == DT_DIR) {
+            return;
+        } else {
+            
+            char nama_file[50];
+            char *split;
+            char *folder[3];
+            
+            sprintf(nama_file, "%s", dent->d_name);
+            split = strtok(dent->d_name, ";_");
+
+            while (split != NULL) {
+                int i;
+                for (i = 0; i < 3; ++i) {
+                    folder[i] = split;
+                    split = strtok(NULL, ";_");
+                }
+                
+                char *jenis = folder[0];
+                char *nama = folder[1];
+                char *umur = folder[2];
+
+                char *dot;
+                dot = strstr(umur, ".jpg");
+                if (dot != NULL) {
+                    int pos = dot - umur;
+                    sprintf(umur, "%.*s", pos, umur);
+                }
+                createKategori(jenis);
+                sleep(1);
+                copyFoto(jenis, nama_file, nama);
+                keterangan(jenis, nama, umur);
+
+            }
+
+        }
+
+    }
+}
+```
+
+### Soal 2.f.
+Pada soal 2.f, praktikan diminta untuk mengkategorikan foto-foto peliharaan ke dalam folder yang telah dibuat dan di rename dengan nama peliharaan. Proses ini dilakukan dengan fungsi ``sprintf()`, `wait()`, `fork()`, dan `exec()`
+### Pembahasan
+Pada tahap ini, penulis membuat sebuah fungsi `void copyFoto(char *dir, char *nama_file, char *nama)` yang nantinya akan dipanggil pada `void kelompok()` untuk mengkategorikan foto-foto peliharaan ke dalam directory yang disediakan.
+``` c
+void copyFoto(char *dir, char *nama_file, char *nama) {
+    chdir("/home/ardha27/modul2/soal2/petshop/");
+    char src[30];
+    char dst[40];
+    sprintf(src, "%s", nama_file);
+
+    sprintf(dst, "%s/%s.jpg", dir, nama);
+
+    if (fork() == 0) {
+        char *argv[] = {"cp", "-T", src, dst, NULL};
+
+        execv("/bin/cp", argv);
+        exit(0); 
+    } 
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void copyFoto(char *dir, char *nama_file, char *nama)` akan dipanggil pada `void kelompok()`. Didalam `void kelompok()` dilakukan pemotongan pada nama tiap file sehingga didapatkan nama dari seluruh peliharaan yang terdapat di dalam .zip dan dijadikan parameter untuk `void copyFoto(char *dir, char *nama_file, char *nama)`
+``` c
+void kelompok()
+{
+    DIR *dirp;
+    struct dirent *dent;
+    dirp = opendir("/home/ardha27/modul2/soal2/petshop");
+    while (dent = readdir(dirp))
+    {
+        if(strcmp(dent->d_name,".") == 0 || strcmp(dent->d_name,"..") == 0) {
+
+        } else if (dent->d_type == DT_DIR) {
+            return;
+        } else {
+            
+            char nama_file[50];
+            char *split;
+            char *folder[3];
+            
+            sprintf(nama_file, "%s", dent->d_name);
+            split = strtok(dent->d_name, ";_");
+
+            while (split != NULL) {
+                int i;
+                for (i = 0; i < 3; ++i) {
+                    folder[i] = split;
+                    split = strtok(NULL, ";_");
+                }
+                
+                char *jenis = folder[0];
+                char *nama = folder[1];
+                char *umur = folder[2];
+
+                char *dot;
+                dot = strstr(umur, ".jpg");
+                if (dot != NULL) {
+                    int pos = dot - umur;
+                    sprintf(umur, "%.*s", pos, umur);
+                }
+                createKategori(jenis);
+                sleep(1);
+                copyFoto(jenis, nama_file, nama);
+                keterangan(jenis, nama, umur);
+
+            }
+
+        }
+
+    }
+}
+```
+
+### Soal 2.g.
+Pada soal 2.g, praktikan diminta untuk Membuat keterangan.txt pada masing-masing folder yang berisi nama dan umur semua peliharaan dalam folder tersebut. Proses ini dilakukan dengan fungsi `sprintf()`, `fpirntf()`, `fclose()`, `wait()`, `fork()`, dan `exec()`
+### Pembahasan
+Pertama-tama, penulis membuat sebuah fungsi `void keterangan(char *dir, char *pet, char *umur)` yang nantinya akan dipanggil pada `void kelompok()` untuk menulis keterangan.txt pada tiap directory.
+``` c
+void keterangan(char *dir, char *pet, char *umur) {
+    char folder[50];
+    sprintf(folder, "%s/keterangan.txt", dir);
+
+    if (fork() == 0) {
+        FILE *dirp;
+        dirp = fopen(folder, "a");
+        fprintf(dirp, "nama : %s\numur : %s\n\n", pet, umur);
+        fclose(dirp);
+        exit(0);
+    }
+    wait(NULL);
+}
+```
+Selanjutnya fungsi `void keterangan(char *dir, char *pet, char *umur)` akan dipanggil pada `void kelompok()`. Didalam `void kelompok()` dilakukan pemotongan pada nama tiap file sehingga didapatkan nama dan umur dari seluruh peliharaan yang terdapat di dalam .zip. Lalu, dijadikan parameter untuk `void keterangan(char *dir, char *pet, char *umur)`
+``` c
+void kelompok()
+{
+    DIR *dirp;
+    struct dirent *dent;
+    dirp = opendir("/home/ardha27/modul2/soal2/petshop");
+    while (dent = readdir(dirp))
+    {
+        if(strcmp(dent->d_name,".") == 0 || strcmp(dent->d_name,"..") == 0) {
+
+        } else if (dent->d_type == DT_DIR) {
+            return;
+        } else {
+            
+            char nama_file[50];
+            char *split;
+            char *folder[3];
+            
+            sprintf(nama_file, "%s", dent->d_name);
+            split = strtok(dent->d_name, ";_");
+
+            while (split != NULL) {
+                int i;
+                for (i = 0; i < 3; ++i) {
+                    folder[i] = split;
+                    split = strtok(NULL, ";_");
+                }
+                
+                char *jenis = folder[0];
+                char *nama = folder[1];
+                char *umur = folder[2];
+
+                char *dot;
+                dot = strstr(umur, ".jpg");
+                if (dot != NULL) {
+                    int pos = dot - umur;
+                    sprintf(umur, "%.*s", pos, umur);
+                }
+                createKategori(jenis);
+                sleep(1);
+                copyFoto(jenis, nama_file, nama);
+                keterangan(jenis, nama, umur);
+
+            }
+
+        }
+
+    }
+}
+```
+
+## Dokumentasi Program
+
+### Screenshoot Folder Kategori Peliharaan
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Hasil_Soal2_1.png)
+
+### Screenshoot Isi Folder Kategori Peliharaan
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Hasil_Soal2_2.png)
+
+### Screenshoot Salah Satu Keterangan.txt
+![image](https://raw.githubusercontent.com/Herwindams24/soal-shift-sisop-modul-2-IT05-2021/main/img/Hasil_Soal2_3.png)
 
 ---
 ## Soal 3
