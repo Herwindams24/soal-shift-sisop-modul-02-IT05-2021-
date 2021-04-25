@@ -456,7 +456,7 @@ Adapun beberapa rincian soal yang diminta:
 
 ### Pembahasan
 
-Untuk membuat program C yang berjalan di background, pertama harus melakukan atau mengimport #include terhadap library yang diperlukan. 
+Untuk membuat program C ini, pertama harus melakukan atau mengimport #include terhadap library yang diperlukan. 
 Berikut merupakan 8 library yang penulis gunakan:
 
 ``` c
@@ -512,7 +512,7 @@ int main() {
 ### Soal 2.b.
 Pada soal 2.b, praktikan diminta untuk mengekstrak file .zip yang telah diberikan. Proses ekstrak ini dilakukan dengan fungsi `wait()`, `fork()` dan `exec()`
 ### Pembahasan
-Selnajutnya, penulis membuat sebuah fungsi `void extractZip()` yang nantinya akan dipanggil `int main()` untuk mengesktrak .zip yang diberikan.
+Untuk mengekstrak file .zip, penulis membuat sebuah fungsi `void extractZip()` yang nantinya akan dipanggil `int main()` untuk mengesktrak .zip yang diberikan.
 ``` c
 void extractZip()
 {
@@ -708,7 +708,7 @@ void kelompok()
 ```
 
 ### Soal 2.f.
-Pada soal 2.f, praktikan diminta untuk mengkategorikan foto-foto peliharaan ke dalam folder yang telah dibuat dan di rename dengan nama peliharaan. Proses ini dilakukan dengan fungsi ``sprintf()`, `wait()`, `fork()`, dan `exec()`
+Pada soal 2.f, praktikan diminta untuk mengkategorikan foto-foto peliharaan ke dalam folder yang telah dibuat dan di rename dengan nama peliharaan. Proses ini dilakukan dengan fungsi `sprintf()`, `wait()`, `fork()`, dan `exec()`
 ### Pembahasan
 Pada tahap ini, penulis membuat sebuah fungsi `void copyFoto(char *dir, char *nama_file, char *nama)` yang nantinya akan dipanggil pada `void kelompok()` untuk mengkategorikan foto-foto peliharaan ke dalam directory yang disediakan.
 ``` c
